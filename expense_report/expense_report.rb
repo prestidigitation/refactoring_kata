@@ -8,10 +8,11 @@ class Expense
   end
 end
 
-def printReport(*expenses)
+def printReport(*expenses, time)
   total = 0
   mealExpenses = 0
-  puts "Expenses: #{Time.now}"
+  # puts "Expenses: #{Time.now}"
+  puts "Expenses: #{time}"
   for expense in expenses
     if expense.type == :dinner || expense.type == :breakfast
       mealExpenses += expense.amount
