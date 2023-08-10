@@ -12,14 +12,13 @@ class Expense
   end
 
   def get_name
-    expenseName = ""
     case type
     when :breakfast
-        expenseName = "Breakfast"
+      "Breakfast"
     when :dinner
-        expenseName = "Dinner"
+      "Dinner"
     when :car_rental
-        expenseName = "Car Rental"
+      "Car Rental"
     end
   end
 
@@ -31,19 +30,19 @@ end
 class ExpenseReport
   def print_report(*expenses, time)
     total = 0
-    mealExpenses = 0
+    meal_expenses = 0
     # puts "Expenses: #{Time.now}"
     puts "Expenses: #{time}"
-    for expense in expenses
+    expenses.each do |expense|
       if expense.is_meal?
-        mealExpenses += expense.amount
+        meal_expenses += expense.amount
       end
       expense_name = expense.get_name
-      mealOverExpensesMarker = expense.is_over_limit? ? "X" : " "
-      puts "#{expense_name}\t#{expense.amount}\t#{mealOverExpensesMarker}"
+      meal_over_expenses_marker = expense.is_over_limit? ? "X" : " "
+      puts "#{expense_name}\t#{expense.amount}\t#{meal_over_expenses_marker}"
       total += expense.amount
     end
-    puts "Meal Expenses: #{mealExpenses}" + "\n"
+    puts "Meal Expenses: #{meal_expenses}" + "\n"
     puts "Total Expenses: #{total}" + "\n"
   end
 end
