@@ -1,10 +1,9 @@
 #!/usr/bin/ruby
 
-class Expense
-  attr_reader :type, :amount
-  def initialize(type, amount)
+class ExpenseType
+  attr_reader :type
+  def initialize(type)
     @type = type
-    @amount = amount
   end
 
   def is_meal?
@@ -21,9 +20,17 @@ class Expense
       "Car Rental"
     end
   end
+end
+
+class Expense
+  attr_reader :type, :amount
+  def initialize(type, amount)
+    @type = ExpenseType.new(type)
+    @amount = amount
+  end
 
   def is_over_limit?
-    type == :dinner && amount > 5000 || type == :breakfast && amount > 1000
+    type.type == :dinner && amount > 5000 || type.type == :breakfast && amount > 1000
   end
 end
 
@@ -34,10 +41,11 @@ class ExpenseReport
     # puts "Expenses: #{Time.now}"
     puts "Expenses: #{time}"
     expenses.each do |expense|
-      if expense.is_meal?
+      expense_type = expense.type
+      if expense_type.is_meal?
         meal_expenses += expense.amount
       end
-      expense_name = expense.get_name
+      expense_name = expense_type.get_name
       meal_over_expenses_marker = expense.is_over_limit? ? "X" : " "
       puts "#{expense_name}\t#{expense.amount}\t#{meal_over_expenses_marker}"
       total += expense.amount
