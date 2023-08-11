@@ -12,12 +12,12 @@ RSpec.describe ExpenseReport do
   
   it "prints out a list of expenses" do
     expenses = [
-      Expense.new(:breakfast, 1000),
-      Expense.new(:breakfast, 1001),
-      Expense.new(:dinner, 5000),
-      Expense.new(:dinner, 5001),
-      Expense.new(:car_rental, 13000),
-      Expense.new(:car_rental, 92233720368547)
+      Expense.new(ExpenseType.new(type: :breakfast, meal: true), 1000),
+      Expense.new(ExpenseType.new(type: :breakfast, meal: true), 1001),
+      Expense.new(ExpenseType.new(type: :dinner, meal: true), 5000),
+      Expense.new(ExpenseType.new(type: :dinner, meal: true), 5001),
+      Expense.new(ExpenseType.new(type: :car_rental), 13000),
+      Expense.new(ExpenseType.new(type: :car_rental), 92233720368547)
     ]
 
     report = ExpenseReport.new

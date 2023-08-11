@@ -1,13 +1,14 @@
 #!/usr/bin/ruby
 
 class ExpenseType
-  attr_reader :type
-  def initialize(type)
+  attr_reader :type, :meal
+  def initialize(type:, meal: false)
     @type = type
+    @meal = meal
   end
 
   def is_meal?
-    type == :dinner || type == :breakfast
+    meal
   end
 
   def get_name
@@ -18,7 +19,7 @@ end
 class Expense
   attr_reader :type, :amount
   def initialize(type, amount)
-    @type = ExpenseType.new(type)
+    @type = type
     @amount = amount
   end
 
