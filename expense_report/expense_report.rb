@@ -11,14 +11,7 @@ class ExpenseType
   end
 
   def get_name
-    case type
-    when :breakfast
-      "Breakfast"
-    when :dinner
-      "Dinner"
-    when :car_rental
-      "Car Rental"
-    end
+    type.to_s.split("_").map(&:capitalize).join(" ")
   end
 end
 
