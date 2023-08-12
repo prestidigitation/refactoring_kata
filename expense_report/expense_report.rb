@@ -1,10 +1,20 @@
 #!/usr/bin/ruby
 
 class ExpenseType
-  attr_reader :type, :meal
-  def initialize(type:, meal: false)
+  attr_reader :type, :limit
+
+  TYPES = {
+    dinner: { limit: 5000, meal: true },
+    breakfast: { limit: 1000, meal: true },
+    car_rental: {}
+  }.freeze
+
+  def initialize(type)
     @type = type
-    @meal = meal
+    type_properties = TYPES.fetch(type) { raise ArgumentError, "Invalid Expense Type" }
+    @meal = type_properties.fetch(:meal, false)
+    @name = type_properties.fetch(:name, nil)
+    @limit = type_properties.fetch(:limit, nil)
   end
 
   def is_meal?
@@ -12,8 +22,16 @@ class ExpenseType
   end
 
   def get_name
-    type.to_s.split("_").map(&:capitalize).join(" ")
+    if name.nil?
+      type.to_s.split("_").map(&:capitalize).join(" ")
+    else
+      name
+    end 
   end
+
+  private
+
+  attr_reader :meal, :name
 end
 
 class Expense
@@ -24,7 +42,11 @@ class Expense
   end
 
   def is_over_limit?
-    type.type == :dinner && amount > 5000 || type.type == :breakfast && amount > 1000
+    if !type.limit
+      false
+    else
+      amount > type.limit
+    end
   end
 end
 
