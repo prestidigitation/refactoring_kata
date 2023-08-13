@@ -5,6 +5,7 @@ class ExpenseType
 
   TYPES = {
     dinner: { limit: 5000, meal: true },
+    lunch: { limit: 2000, meal: true },
     breakfast: { limit: 1000, meal: true },
     car_rental: {}
   }.freeze
