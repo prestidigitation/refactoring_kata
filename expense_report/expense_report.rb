@@ -61,21 +61,25 @@ end
 
 class ExpenseReport
   def print_report(*expenses, time)
-    total = 0
-    meal_expenses = 0
     # puts "Expenses: #{Time.now}"
     puts "Expenses: #{time}"
-    expenses.each do |expense|
-      # expense_type = expense.type
-      if expense.is_meal?
-        meal_expenses += expense.amount
-      end
-      expense_name = expense.get_name
-      meal_over_expenses_marker = expense.is_over_limit? ? "X" : " "
-      puts "#{expense_name}\t#{expense.amount}\t#{meal_over_expenses_marker}"
-      total += expense.amount
-    end
+    meal_expenses = get_meal_expenses(expenses)
+    total = get_total(expenses)
+    expenses.each { |expense| print_single_expense(expense) }
     puts "Meal Expenses: #{meal_expenses}" + "\n"
     puts "Total Expenses: #{total}" + "\n"
+  end
+
+  def get_meal_expenses(expenses)
+    expenses.sum { |expense| expense.is_meal? ? expense.amount : 0 }
+  end
+
+  def get_total(expenses)
+    expenses.sum { |expense| expense.amount }
+  end
+
+  def print_single_expense(expense)
+    meal_over_expenses_marker = expense.is_over_limit? ? "X" : " "
+    puts "#{expense.get_name}\t#{expense.amount}\t#{meal_over_expenses_marker}"
   end
 end
