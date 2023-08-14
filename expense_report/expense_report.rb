@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 
 class ExpenseType
-  attr_reader :type, :limit
+  attr_reader :type, :limit, :name
 
   TYPES = {
     dinner: { limit: 5000, meal: true },
@@ -14,7 +14,7 @@ class ExpenseType
     @type = type
     type_properties = TYPES.fetch(type) { raise ArgumentError, "Invalid Expense Type" }
     @meal = type_properties.fetch(:meal, false)
-    @name = type_properties.fetch(:name, nil)
+    @name = type_properties.fetch(:name) { type.to_s.split("_").map(&:capitalize).join(" ") }
     @limit = type_properties.fetch(:limit, nil)
   end
 
@@ -22,17 +22,9 @@ class ExpenseType
     meal
   end
 
-  def get_name
-    if name.nil?
-      type.to_s.split("_").map(&:capitalize).join(" ")
-    else
-      name
-    end 
-  end
-
   private
 
-  attr_reader :meal, :name
+  attr_reader :meal
 end
 
 class Expense
@@ -46,8 +38,8 @@ class Expense
     type.is_meal?
   end
 
-  def get_name
-    type.get_name
+  def name
+    type.name
   end
 
   def is_over_limit?
@@ -80,6 +72,6 @@ class ExpenseReport
 
   def print_single_expense(expense)
     meal_over_expenses_marker = expense.is_over_limit? ? "X" : " "
-    puts "#{expense.get_name}\t#{expense.amount}\t#{meal_over_expenses_marker}"
+    puts "#{expense.name}\t#{expense.amount}\t#{meal_over_expenses_marker}"
   end
 end
