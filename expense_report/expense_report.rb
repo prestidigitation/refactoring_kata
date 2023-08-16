@@ -1,4 +1,5 @@
 #!/usr/bin/ruby
+# frozen_string_literal: true
 
 class ExpenseType
   attr_reader :type, :limit, :name
@@ -12,13 +13,13 @@ class ExpenseType
 
   def initialize(type)
     @type = type
-    type_properties = TYPES.fetch(type) { raise ArgumentError, "Invalid Expense Type" }
+    type_properties = TYPES.fetch(type) { raise ArgumentError, 'Invalid Expense Type' }
     @meal = type_properties.fetch(:meal, false)
-    @name = type_properties.fetch(:name) { type.to_s.split("_").map(&:capitalize).join(" ") }
+    @name = type_properties.fetch(:name) { type.to_s.split('_').map(&:capitalize).join(' ') }
     @limit = type_properties.fetch(:limit, nil)
   end
 
-  def is_meal?
+  def meal?
     meal
   end
 
@@ -29,20 +30,21 @@ end
 
 class Expense
   attr_reader :type, :amount
+
   def initialize(type, amount)
     @type = type
     @amount = amount
   end
 
-  def is_meal?
-    type.is_meal?
+  def meal?
+    type.meal?
   end
 
   def name
     type.name
   end
 
-  def is_over_limit?
+  def over_limit?
     if !type.limit
       false
     else
@@ -58,20 +60,20 @@ class ExpenseReport
     meal_expenses = get_meal_expenses(expenses)
     total = get_total(expenses)
     expenses.each { |expense| print_single_expense(expense) }
-    puts "Meal Expenses: #{meal_expenses}" + "\n"
-    puts "Total Expenses: #{total}" + "\n"
+    puts "Meal Expenses: #{meal_expenses}\n"
+    puts "Total Expenses: #{total}\n"
   end
 
   def get_meal_expenses(expenses)
-    expenses.sum { |expense| expense.is_meal? ? expense.amount : 0 }
+    expenses.sum { |expense| expense.meal? ? expense.amount : 0 }
   end
 
   def get_total(expenses)
-    expenses.sum { |expense| expense.amount }
+    expenses.sum(&:amount)
   end
 
   def print_single_expense(expense)
-    meal_over_expenses_marker = expense.is_over_limit? ? "X" : " "
+    meal_over_expenses_marker = expense.over_limit? ? 'X' : ' '
     puts "#{expense.name}\t#{expense.amount}\t#{meal_over_expenses_marker}"
   end
 end
