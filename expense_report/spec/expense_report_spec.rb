@@ -1,16 +1,18 @@
-require_relative "../expense_report"
+# frozen_string_literal: true
+
+require_relative '../lib/expense_report'
 
 RSpec.describe ExpenseReport do
-  it "prints out an empty list of expenses" do
+  it 'prints out an empty list of expenses' do
     report = ExpenseReport.new
     time = Time.new(0)
 
     expected_result = "Expenses: 0000-01-01 00:00:00 -0456\nMeal Expenses: 0\nTotal Expenses: 0\n"
 
-    expect { report.print_report(*[], time) }.to output(expected_result).to_stdout
+    expect { report.print_report([], time) }.to output(expected_result).to_stdout
   end
-  
-  it "prints out a list of expenses" do
+
+  it 'prints out a list of expenses' do
     expenses = [
       Expense.new(ExpenseType.new(:breakfast), 1000),
       Expense.new(ExpenseType.new(:breakfast), 1001),
@@ -18,8 +20,8 @@ RSpec.describe ExpenseReport do
       Expense.new(ExpenseType.new(:lunch), 2001),
       Expense.new(ExpenseType.new(:dinner), 5000),
       Expense.new(ExpenseType.new(:dinner), 5001),
-      Expense.new(ExpenseType.new(:car_rental), 13000),
-      Expense.new(ExpenseType.new(:car_rental), 92233720368547)
+      Expense.new(ExpenseType.new(:car_rental), 13_000),
+      Expense.new(ExpenseType.new(:car_rental), 92_233_720_368_547)
     ]
 
     report = ExpenseReport.new
