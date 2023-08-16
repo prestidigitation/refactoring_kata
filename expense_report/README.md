@@ -1,4 +1,4 @@
-Expense Report Kata ripped from the following source:
+Expense Report Kata code and following README copied from the following source:
 https://github.com/christianhujer/expensereport/
 
 # ExpenseReport
