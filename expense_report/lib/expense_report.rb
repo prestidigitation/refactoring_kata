@@ -55,20 +55,19 @@ end
 
 class ExpenseReport
   def print_report(*expenses, time)
-    # puts "Expenses: #{Time.now}"
     puts "Expenses: #{time}"
-    meal_expenses = get_meal_expenses(expenses)
-    total = get_total(expenses)
+    meal_expenses = meal_expenses_total(expenses)
+    total = all_expenses_total(expenses)
     expenses.each { |expense| print_single_expense(expense) }
     puts "Meal Expenses: #{meal_expenses}\n"
     puts "Total Expenses: #{total}\n"
   end
 
-  def get_meal_expenses(expenses)
+  def meal_expenses_total(expenses)
     expenses.sum { |expense| expense.meal? ? expense.amount : 0 }
   end
 
-  def get_total(expenses)
+  def all_expenses_total(expenses)
     expenses.sum(&:amount)
   end
 
