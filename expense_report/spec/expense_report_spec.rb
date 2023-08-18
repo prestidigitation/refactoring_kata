@@ -9,7 +9,7 @@ RSpec.describe ExpenseReport do
 
     expected_result = "Expenses: 0000-01-01 00:00:00 -0456\nMeal Expenses: 0\nTotal Expenses: 0\n"
 
-    expect { report.print_report([], time) }.to output(expected_result).to_stdout
+    expect { report.print_report(*[], time) }.to output(expected_result).to_stdout
   end
 
   it 'prints out a list of expenses' do
