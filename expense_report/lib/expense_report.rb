@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 
 class ExpenseType
-  attr_reader :type, :limit, :name
+  attr_reader :type, :name, :meal, :limit
 
   TYPES = {
     dinner: { limit: 5000, meal: true },
@@ -13,19 +13,11 @@ class ExpenseType
 
   def initialize(type)
     @type = type
-    type_properties = TYPES.fetch(type) { raise ArgumentError, 'Invalid Expense Type' }
-    @meal = type_properties.fetch(:meal, false)
+    type_properties = TYPES.fetch(type) { raise ArgumentError, "Invalid Expense Type: #{type}" }
     @name = type_properties.fetch(:name) { type.to_s.split('_').map(&:capitalize).join(' ') }
-    @limit = type_properties.fetch(:limit, nil)
+    @meal = type_properties[:meal]
+    @limit = type_properties[:limit]
   end
-
-  def meal?
-    meal
-  end
-
-  private
-
-  attr_reader :meal
 end
 
 class Expense
@@ -36,20 +28,16 @@ class Expense
     @amount = amount
   end
 
-  def meal?
-    type.meal?
-  end
-
   def name
     type.name
   end
+  
+  def meal
+    type.meal
+  end
 
   def over_limit?
-    if !type.limit
-      false
-    else
-      amount > type.limit
-    end
+    type.limit && amount > type.limit
   end
 end
 
@@ -59,12 +47,12 @@ class ExpenseReport
     meal_expenses = meal_expenses_total(expenses)
     total = all_expenses_total(expenses)
     expenses.each { |expense| print_single_expense(expense) }
-    puts "Meal Expenses: #{meal_expenses}\n"
-    puts "Total Expenses: #{total}\n"
+    puts "Meal Expenses: #{meal_expenses}"
+    puts "Total Expenses: #{total}"
   end
 
   def meal_expenses_total(expenses)
-    expenses.sum { |expense| expense.meal? ? expense.amount : 0 }
+    expenses.filter(&:meal).sum(&:amount)
   end
 
   def all_expenses_total(expenses)
